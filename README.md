@@ -4,17 +4,17 @@ Este repositorio contiene instrucciones para la implementación de un caso de us
 
 ## 🎯 Meta a Implementar
 
-### **Caso de uso 1: Proporcionar un método de registro (correo/contraseña)**
+### Caso de uso 1: Proporcionar un método de registro (correo/contraseña)
 **Actor:** Usuario nuevo  
-**Descripción:** El usuario crea una cuenta proporcionando sus datos básicos para acceder a la aplicación.
+**Descripción:** El usuario crea una cuenta proporcionando sus datos básicos para acceder a la aplicación.  
 
 **Flujo principal:**
-1. El usuario selecciona la opción "Registrarse"
-2. Ingresa nombre, correo y contraseña
-3. El sistema valida los datos
-4. El sistema crea la cuenta y muestra un mensaje de bienvenida
+1. El usuario selecciona la opción “Registrarse”.
+2. Ingresa nombre, correo y contraseña.
+3. El sistema valida los datos de que las contraseña sean iguales y que el correo tenga un formato válido como abc@def.ghi
+4. El sistema crea la cuenta y muestra un mensaje de bienvenida.
 
-**Flujo alterno:**
+**Flujo alterno:**  
 Si el correo ya está registrado, el sistema muestra un mensaje indicando que debe iniciar sesión.
 
 ---
@@ -22,9 +22,9 @@ Si el correo ya está registrado, el sistema muestra un mensaje indicando que de
 ## 🛠️ Configuración Inicial
 
 ### 1. Crear cuenta en Thunkable
-- Visita [thunkable.com/signup](https://thunkable.com/signup)
+- Visita [x.thunkable.com/signup](https://x.thunkable.com/signup)
 - Haz clic en `Sign up with Google`
--  * Si te  pregunta el motivo por cual usarás Thunkable, selecciona las opciones que consideres adecuadas.
+  * Si te  pregunta el motivo por cual usarás Thunkable, selecciona las opciones que consideres adecuadas.
 
 ### 2. Crear proyecto
 - Visita [x.thunkable.com/projects](https://x.thunkable.com/projects)
@@ -60,6 +60,7 @@ El diseño de la aplicación es libre, pero se requiere el uso de mínimo 2 pant
 - Text Input (Nombre)
 - Text Input (Email)
 - Text Input (Contraseña)
+- Text Input (Confirmar contraseña)
 - Button (Registrar cuenta) -> Validar datos -> Crear cuenta -> Bienvenida
 ```
 
@@ -116,24 +117,40 @@ Se solicita que el botón `[INICIO] button-Registro` navegue a la pantalla 2.
 
 ### Variables
 - `accounts` (lista con 1+ objeto) simular base de datos; checar si ya existe un correo
+
 ![accounts variable](IMG/GUIDE-AccountsVariable.png)
 
 ### `[REGISTRO] button-RegistrarCuenta`
 
-- Al hacer clic en el botón, el sistema debe validar los datos:
-  - Si el correo **ya está registrado**, deberá mostrar un mensaje de error.
-  - Si el correo **no está registrado**, podrá crear la cuenta.
+Para este apartado, se sugiere utilizar un [módulo lógico](https://x.thunkable.com/module/6928d634e9c76478c8119dd8/) con un set de funciones útiles:
+- **is email address?** (testString): checa si el `testString` dado sigue un formato de correo válido, regresando `true` si es válido; o al contrario, `false`.
+- **get index of first object with field matching query** (list, field, query): itera por todos los elementos de una `list` dada. checa si el valor de un `field` es igual al `query`, en cual caso regresa su `índice`; si ningun objeto concuerda, regresa `null`.
+- **is list filled?** (list): itera por todos los elementos de una `list` dada. regresa `true` si ningun elemento está vacío; al contrario, regresa `false`.
 
-Para este apartado, se sugiere utilizar un módulo lógico con un set de funciones útiles:
-
+**Link del módulo**
 ```
 https://x.thunkable.com/module/6928d634e9c76478c8119dd8/
 ```
+
+**Guía para la adición del módulo**
+
 ![Implement Logic Module](IMG/GUIDE-LogicModule.gif)
 
-**Algoritmo empleado:**
+#### Algoritmo
 
-![Validación de Correo](IMG/GUIDE-ValidateEmailExisting.png)
+- Al hacer clic en el botón, el sistema debe validar los datos:
+  - Si el correo **no sigue un formato válido**, deberá mostrar un mensaje de error.
+    - 1. **is email address?** returns `false`
+  - Si el correo **sigue un formato válido** (abc@def.ghi)... 
+    - 1. **is email address?** returns `true`
+    - Si el correo **ya está registrado**, deberá mostrar un mensaje de error. 
+      - 1. **get index of first object with field matching query** no regresa `null`
+    - Si el correo **no está registrado**...
+      - 1. **get index of first object with field matching query** returns `null`
+      - ...pero las **contraseñas no son iguales**, deberá mostrar un mensaje de error. 
+        - 1. Texto de `[REGISTRO] input-Contraseña` ≠ texto de `[REGISTRO] input-ConfirmarContraseña`
+      - Si las **contraseñas son iguales**, se podrá crear la cuenta, agregándose como elemento a la lista de la variable `accounts`.
+        - 1. Texto de `[REGISTRO] input-Contraseña` = texto de `[REGISTRO] input-ConfirmarContraseña`
 
 ---
 
@@ -142,16 +159,17 @@ https://x.thunkable.com/module/6928d634e9c76478c8119dd8/
 Usando el botón de `Web Preview` o `Live Test` (si tienes la aplicación de Thunkable en tu celular), se sugiere que pruebes los siguientes casos:
 
 ### Casos a verificar:
-1. ❗️ **Email nuevo**
-2. ❗️ **Email duplicado/existente**
-3. ❓ Email inválido (opcional)
-4. ❓ Campos vacíos (opcional)
+1. ❓ Campos vacíos (opcional)
+2. ❗️ **Campos llenos, email inválido**
+3. ❗️ **Campos llenos, email duplicado**
+4. ❗️ **Campos llenos, email nuevo, contraseñas que no concuerdan**
+5. ❗️ **Campos llenos, email nuevo, contraseñas que concuerdan**
 
 ---
 
 ## 📚 Recursos Adicionales
 
-- [Proyecto de Referencia](https://x.thunkable.com/projects/6927db266bf3e34d5093b0db/03e2c4fd-add6-450b-bff7-47e2ccc183a8/designer)
+- [Proyecto de Referencia](https://x.thunkable.com/projects/6927db266bf3e34d5093b0db/b3c47815-320a-40df-b170-08b142ccaa48/blocks)
 
 ### Documentación oficial:
 - [Thunkable Docs](https://docs.thunkable.com/)
