@@ -129,7 +129,7 @@ Para este apartado, se sugiere utilizar un módulo lógico con un set de funcion
 ```
 https://x.thunkable.com/module/6928d634e9c76478c8119dd8/
 ```
-![Implement Logic Module](IMG/GUIDE-LogicModule.mp4)
+![Implement Logic Module](IMG/GUIDE-LogicModule.gif)
 
 **Algoritmo empleado:**
 
